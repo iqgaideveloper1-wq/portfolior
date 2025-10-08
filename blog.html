@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,7 +84,7 @@
       margin-right: 8px;
       line-height: 0;
     }
-    .blog .entry .entry-meta a {
+    .blog .entry .entry-meta a, .blog .entry .entry-meta .meta-value {
       color: #777777;
       font-size: 14px;
       display: inline-block;
@@ -109,6 +110,35 @@
       background: #37b3ed;
     }
     
+    /* Blog Pagination */
+    .blog .blog-pagination {
+        margin-top: 30px;
+        color: #5e6d77;
+    }
+    .blog .blog-pagination ul {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    .blog .blog-pagination li {
+        margin: 0 5px;
+        transition: 0.3s;
+    }
+    .blog .blog-pagination li a {
+        color: #050d18;
+        padding: 7px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #d4d7da;
+    }
+    .blog .blog-pagination li.active a, .blog .blog-pagination li a:hover {
+        background: #149ddd;
+        color: #fff;
+        border-color: #149ddd;
+    }
+
     /* Blog Sidebar */
     .blog .sidebar {
       padding: 30px;
@@ -297,6 +327,7 @@
       <li><a href="index.html#testimonials" class="nav-link" title="Testimonials"><i class='bx bx-comment-detail'></i> <span>Testimonials</span></a></li>
       <li><a href="index.html#contact" class="nav-link" title="Contact"><i class='bx bx-envelope'></i> <span>Contact</span></a></li>
       <li><a href="blog.html" class="nav-link active" title="Blog"><i class='bx bx-news'></i> <span>Blog</span></a></li>
+      <li><a href="blog-admin.html" class="nav-link" title="Blog Admin"><i class='bx bx-edit'></i> <span>Blog Admin</span></a></li>
     </ul>
   </nav>
 
@@ -338,44 +369,29 @@
               <h3 class="sidebar-title">Categories</h3>
               <div class="sidebar-item categories">
                 <ul>
-                  <li><a href="#">General <span>(25)</span></a></li>
-                  <li><a href="#">Lifestyle <span>(12)</span></a></li>
-                  <li><a href="#">Travel <span>(5)</span></a></li>
-                  <li><a href="#">Design <span>(22)</span></a></li>
-                  <li><a href="#">Creative <span>(8)</span></a></li>
-                  <li><a href="#">Educaion <span>(14)</span></a></li>
+                  <!-- Dynamic categories will be injected here -->
                 </ul>
               </div><!-- End sidebar categories-->
 
               <h3 class="sidebar-title">Recent Posts</h3>
               <div class="sidebar-item recent-posts">
-                <div class="post-item clearfix">
-                  <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2070&auto=format&fit=crop&w=80" alt="">
-                  <h4><a href="blog-single.html">Nihil blanditiis at in nihil autem</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2000</time>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=2070&auto=format&fit=crop&w=80" alt="">
-                  <h4><a href="blog-single.html">Quidem autem et impedit</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
+                <!-- Dynamic recent posts will be injected here -->
               </div><!-- End sidebar recent posts-->
 
               <h3 class="sidebar-title">Tags</h3>
               <div class="sidebar-item tags">
                 <ul>
-                  <li><a href="#">App</a></li>
-                  <li><a href="#">IT</a></li>
-                  <li><a href="#">Business</a></li>
-                  <li><a href="#">Mac</a></li>
+                  <li><a href="#">AI</a></li>
+                  <li><a href="#">Python</a></li>
+                  <li><a href="#">Web Dev</a></li>
+                  <li><a href="#">Full-Stack</a></li>
                   <li><a href="#">Design</a></li>
-                  <li><a href="#">Office</a></li>
-                  <li><a href="#">Creative</a></li>
-                  <li><a href="#">Studio</a></li>
-                  <li><a href="#">Smart</a></li>
-                  <li><a href="#">Tips</a></li>
-                  <li><a href="#">Marketing</a></li>
+                  <li><a href="#">AWS</a></li>
+                  <li><a href="#">Cloud</a></li>
+                  <li><a href="#">Automation</a></li>
+                  <li><a href="#">UI</a></li>
+                  <li><a href="#">UX</a></li>
+                  <li><a href="#">TensorFlow</a></li>
                 </ul>
               </div><!-- End sidebar tags-->
 
@@ -384,6 +400,13 @@
           </div><!-- End blog sidebar -->
 
         </div>
+        
+        <div class="blog-pagination">
+             <ul class="justify-content-center">
+                <!-- Pagination links will be injected here -->
+             </ul>
+        </div>
+
 
       </div>
     </section>
@@ -402,6 +425,8 @@
   </footer>
   
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="blog-data.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       "use strict";
@@ -436,6 +461,132 @@
         once: true,
         mirror: false
       });
+
+      // --- DYNAMIC BLOG LOGIC ---
+
+      function getBlogData() {
+        let posts = localStorage.getItem('blogPosts');
+        if (!posts) {
+          localStorage.setItem('blogPosts', JSON.stringify(blogData));
+          return blogData;
+        }
+        return JSON.parse(posts);
+      }
+      
+      const allPosts = getBlogData();
+      const entriesContainer = document.querySelector('.entries');
+      const paginationContainer = document.querySelector('.blog-pagination ul');
+      const postsPerPage = 2;
+      let currentPage = 1;
+
+      function formatISODate(dateString) {
+          const d = new Date(dateString);
+          if (isNaN(d.getTime())) return "2024-01-01"; 
+          const year = d.getFullYear();
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+      }
+
+      function displayPage(page) {
+          currentPage = page;
+          if (!entriesContainer) return;
+          entriesContainer.innerHTML = '';
+          window.scrollTo(0, 0);
+
+          const start = (page - 1) * postsPerPage;
+          const end = start + postsPerPage;
+          const paginatedPosts = allPosts.slice(start, end);
+
+          paginatedPosts.forEach(post => {
+              const postElement = document.createElement('article');
+              postElement.className = 'entry';
+              postElement.innerHTML = `
+                  <div class="entry-img">
+                      <img src="${post.image}" alt="${post.title}" class="img-fluid">
+                  </div>
+                  <h2 class="entry-title">
+                      <a href="blog-single.html?id=${post.id}">${post.title}</a>
+                  </h2>
+                  <div class="entry-meta">
+                      <ul>
+                          <li class="d-flex align-items-center"><i class="bi bi-person"></i> <span class="meta-value">${post.author}</span></li>
+                          <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <time datetime="${formatISODate(post.date)}">${post.date}</time></li>
+                          <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <span class="meta-value">${post.category}</span></li>
+                      </ul>
+                  </div>
+                  <div class="entry-content">
+                      <p>${post.content.split('</p>')[0].replace(/<[^>]+>/g, '')}...</p>
+                      <div class="read-more">
+                          <a href="blog-single.html?id=${post.id}">Read More</a>
+                      </div>
+                  </div>
+              `;
+              entriesContainer.appendChild(postElement);
+          });
+          setupPagination();
+      }
+
+      function setupPagination() {
+          if (!paginationContainer) return;
+          paginationContainer.innerHTML = '';
+          const pageCount = Math.ceil(allPosts.length / postsPerPage);
+
+          for (let i = 1; i <= pageCount; i++) {
+              const li = document.createElement('li');
+              if (i === currentPage) {
+                  li.classList.add('active');
+              }
+              const a = document.createElement('a');
+              a.href = '#';
+              a.innerText = i;
+              a.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  displayPage(i);
+              });
+              li.appendChild(a);
+              paginationContainer.appendChild(li);
+          }
+      }
+
+      function renderSidebar() {
+          const categoriesContainer = document.querySelector('.sidebar .categories ul');
+          const recentPostsContainer = document.querySelector('.sidebar .recent-posts');
+
+          // Render Categories
+          if (categoriesContainer) {
+              const categoryCounts = allPosts.reduce((acc, post) => {
+                  acc[post.category] = (acc[post.category] || 0) + 1;
+                  return acc;
+              }, {});
+
+              categoriesContainer.innerHTML = Object.entries(categoryCounts)
+                  .map(([category, count]) => `<li><a href="#">${category} <span>(${count})</span></a></li>`)
+                  .join('');
+          }
+
+          // Render Recent Posts
+          if (recentPostsContainer) {
+              recentPostsContainer.innerHTML = '';
+              const recentPosts = allPosts.slice(-5).reverse(); 
+              recentPosts.forEach(post => {
+                  const postItem = document.createElement('div');
+                  postItem.className = 'post-item clearfix';
+                  postItem.innerHTML = `
+                      <img src="${post.image}" alt="${post.title}" style="width: 80px; height: 60px; object-fit: cover;">
+                      <h4><a href="blog-single.html?id=${post.id}">${post.title}</a></h4>
+                      <time datetime="${formatISODate(post.date)}">${post.date}</time>
+                  `;
+                  recentPostsContainer.appendChild(postItem);
+              });
+          }
+      }
+      
+      if(entriesContainer && paginationContainer) {
+          displayPage(1);
+          renderSidebar();
+      }
+
     });
   </script>
 </body>

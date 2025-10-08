@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,8 +33,8 @@
     @keyframes animate-preloader{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
     
     .blog-page { padding-top: 60px; }
-    .blog .entry { padding: 30px; margin-bottom: 60px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
-    .blog .entry .entry-img { max-height: 440px; margin: -30px -30px 20px -30px; overflow: hidden; }
+    .blog .entry { padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
+    .blog .entry .entry-img { max-height: 540px; margin: -30px -30px 20px -30px; overflow: hidden; }
     .blog .entry .entry-title { font-size: 28px; font-weight: bold; padding: 0; margin: 0 0 20px 0; }
     .blog .entry .entry-title a { color: #050d18; transition: 0.3s; }
     .blog .entry .entry-title a:hover { color: #149ddd; }
@@ -41,11 +42,9 @@
     .blog .entry .entry-meta ul { display: flex; flex-wrap: wrap; list-style: none; align-items: center; padding: 0; margin: 0; }
     .blog .entry .entry-meta ul li + li::before { display: inline-block; padding-right: 10px; color: #050d18; content: "/"; }
     .blog .entry .entry-meta i { font-size: 16px; margin-right: 8px; line-height: 0; }
-    .blog .entry .entry-meta a { color: #777777; font-size: 14px; display: inline-block; line-height: 1; }
-    .blog .entry .entry-content p { line-height: 24px; }
-    .blog .entry .entry-content .read-more { -moz-text-align-last: right; text-align-last: right; }
-    .blog .entry .entry-content .read-more a { display: inline-block; background: #149ddd; color: #fff; padding: 6px 20px; transition: 0.3s; font-size: 14px; border-radius: 4px; }
-    .blog .entry .entry-content .read-more a:hover { background: #37b3ed; }
+    .blog .entry .entry-meta a, .blog .entry .entry-meta .meta-value { color: #777777; font-size: 14px; display: inline-block; line-height: 1; }
+    .blog .entry .entry-content p, .blog .entry .entry-content ul li, .blog .entry .entry-content blockquote { line-height: 24px; }
+    .blog .entry .entry-content blockquote { border-left: 4px solid #149ddd; padding: 10px 20px; margin: 20px 0; font-style: italic;}
     .blog .sidebar { padding: 30px; margin: 0 0 60px 20px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
     .blog .sidebar .sidebar-title { font-size: 20px; font-weight: 700; padding: 0 0 0 0; margin: 0 0 15px 0; color: #050d18; position: relative; }
     .blog .sidebar .sidebar-item { margin-bottom: 30px; }
@@ -79,27 +78,14 @@
     .mobile-nav-toggle{position:fixed;right:15px;top:15px;z-index:9998;border:0;font-size:24px;transition:all .4s;outline:none!important;background-color:#149ddd;color:#fff;width:40px;height:40px;display:none;align-items:center;justify-content:center;line-height:0;border-radius:50px;cursor:pointer}@media (max-width:991px){.mobile-nav-toggle{display:flex}.navbar{position:fixed;top:0;right:0;left:0;bottom:0;background:rgba(5,13,24,.9);transition:all .4s;z-index:9997;transform:translateX(100%);padding:30px;overflow-y:auto}.mobile-nav-active .navbar{transform:translateX(0)}.navbar ul{display:block;position:absolute;top:55px;right:15px;bottom:15px;left:15px;padding:10px 0;border-radius:10px;background-color:#fff;overflow-y:auto;transition:.3s;z-index:9995}.navbar .nav-link{display:flex;align-items:center;justify-content:flex-start;padding:10px 20px;margin:5px 15px;width:auto;height:auto;border-radius:4px;font-size:15px;color:#45505b;background:0 0;box-shadow:none}.navbar .nav-link i{font-size:16px;margin-right:10px;color:#45505b}.navbar .nav-link span{display:inline}.navbar .nav-link:hover,.navbar .nav-link.active{color:#149ddd}.navbar .nav-link:hover i,.navbar .nav-link.active i{color:#149ddd}}
     .blog .entry-footer { padding-top: 10px; border-top: 1px solid #e6e6e6; }
     .blog .entry-footer i { color: #5e6d77; display: inline; }
-    .blog .entry-footer a { color: #050d18; transition: 0.3s; }
-    .blog .entry-footer a:hover { color: #149ddd; }
-    .blog .entry-footer .cats { list-style: none; display: inline; padding: 0; }
+    .blog .entry-footer .cats { list-style: none; display: inline; padding: 0 20px 0 0; margin: 0; }
     .blog .entry-footer .cats li { display: inline-block; }
-    .blog .entry-footer .tags { list-style: none; display: inline; padding: 0; }
+    .blog .entry-footer .tags { list-style: none; display: inline; padding: 0; margin: 0; }
     .blog .entry-footer .tags li { display: inline-block; }
     .blog .entry-footer .tags li+li::before { display: inline-block; padding-right: 6px; color: #6c757d; content: ","; }
     .blog .blog-author { padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
-    .blog .blog-author img { width: 120px; margin-right: 20px; }
+    .blog .blog-author img { width: 120px; margin-right: 20px; border-radius: 50%;}
     .blog .blog-author h4 { font-weight: 600; font-size: 22px; margin-bottom: 0px; padding: 0; color: #050d18; }
-    .blog .blog-comments { margin-bottom: 30px; }
-    .blog .blog-comments .comments-count { font-weight: bold; }
-    .blog .blog-comments .comment { margin-top: 30px; position: relative; }
-    .blog .blog-comments .comment .d-flex { margin-bottom: 10px; }
-    .blog .blog-comments .comment .comment-img { margin-right: 14px; }
-    .blog .blog-comments .comment .comment-img img { width: 60px; }
-    .blog .blog-comments .comment h5 { font-size: 16px; margin-bottom: 2px; }
-    .blog .blog-comments .comment h5 a { font-weight: bold; color: #444444; }
-    .blog .blog-comments .comment time { display: block; font-size: 14px; color: #6182ba; margin-bottom: 5px; }
-    .blog .blog-comments .reply-form { margin-top: 30px; padding: 30px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
-    .blog .blog-comments .reply-form h4 { font-weight: bold; font-size: 22px; }
     #footer{padding:25px 0;background:#f5f8fd;text-align:center;font-size:14px}
   </style>
 </head>
@@ -123,6 +109,7 @@
       <li><a href="index.html#testimonials" class="nav-link" title="Testimonials"><i class='bx bx-comment-detail'></i> <span>Testimonials</span></a></li>
       <li><a href="index.html#contact" class="nav-link" title="Contact"><i class='bx bx-envelope'></i> <span>Contact</span></a></li>
       <li><a href="blog.html" class="nav-link active" title="Blog"><i class='bx bx-news'></i> <span>Blog</span></a></li>
+       <li><a href="blog-admin.html" class="nav-link" title="Blog Admin"><i class='bx bx-edit'></i> <span>Blog Admin</span></a></li>
     </ul>
   </nav>
 
@@ -132,11 +119,11 @@
     <section class="breadcrumbs">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Blog Post Details</h2>
+          <h2 class="post-title-breadcrumb">Blog Post Details</h2>
           <ol>
             <li><a href="index.html">Home</a></li>
             <li><a href="blog.html">Blog</a></li>
-            <li>Post Details</li>
+            <li class="post-title-breadcrumb">Post Details</li>
           </ol>
         </div>
       </div>
@@ -156,11 +143,17 @@
                 <h3 class="sidebar-title">Search</h3>
                 <div class="sidebar-item search-form"><form action=""><input type="text"><button type="submit"><i class="bi bi-search"></i></button></form></div>
                 <h3 class="sidebar-title">Categories</h3>
-                <div class="sidebar-item categories"><ul><li><a href="#">General <span>(25)</span></a></li><li><a href="#">Lifestyle <span>(12)</span></a></li><li><a href="#">Travel <span>(5)</span></a></li><li><a href="#">Design <span>(22)</span></a></li><li><a href="#">Creative <span>(8)</span></a></li><li><a href="#">Educaion <span>(14)</span></a></li></ul></div>
+                <div class="sidebar-item categories">
+                  <ul>
+                    <!-- Dynamic categories will be injected here -->
+                  </ul>
+                </div>
                 <h3 class="sidebar-title">Recent Posts</h3>
-                <div class="sidebar-item recent-posts"><div class="post-item clearfix"><img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2070&auto=format&fit=crop&w=80" alt=""><h4><a href="#">Nihil blanditiis at in nihil autem</a></h4><time datetime="2020-01-01">Jan 1, 2020</time></div><div class="post-item clearfix"><img src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=2070&auto=format&fit=crop&w=80" alt=""><h4><a href="#">Quidem autem et impedit</a></h4><time datetime="2020-01-01">Jan 1, 2020</time></div></div>
+                <div class="sidebar-item recent-posts">
+                  <!-- Dynamic recent posts will be injected here -->
+                </div>
                 <h3 class="sidebar-title">Tags</h3>
-                <div class="sidebar-item tags"><ul><li><a href="#">App</a></li><li><a href="#">IT</a></li><li><a href="#">Business</a></li><li><a href="#">Mac</a></li><li><a href="#">Design</a></li><li><a href="#">Office</a></li><li><a href="#">Creative</a></li><li><a href="#">Studio</a></li><li><a href="#">Smart</a></li><li><a href="#">Tips</a></li><li><a href="#">Marketing</a></li></ul></div>
+                <div class="sidebar-item tags"><ul><li><a href="#">AI</a></li><li><a href="#">Python</a></li><li><a href="#">Web Dev</a></li><li><a href="#">Full-Stack</a></li><li><a href="#">Design</a></li><li><a href="#">AWS</a></li><li><a href="#">Cloud</a></li><li><a href="#">Automation</a></li><li><a href="#">UI</a></li><li><a href="#">UX</a></li><li><a href="#">TensorFlow</a></li></ul></div>
               </div><!-- End sidebar -->
           </div><!-- End blog sidebar -->
 
@@ -183,6 +176,8 @@
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="blog-data.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       "use strict";
@@ -217,6 +212,131 @@
         once: true,
         mirror: false
       });
+
+      // --- DYNAMIC BLOG SINGLE LOGIC ---
+
+      function getBlogData() {
+        let posts = localStorage.getItem('blogPosts');
+        if (!posts) {
+          localStorage.setItem('blogPosts', JSON.stringify(blogData));
+          return blogData;
+        }
+        return JSON.parse(posts);
+      }
+      
+      const allPosts = getBlogData();
+      const entriesContainer = document.querySelector('.entries');
+      const breadcrumbTitles = document.querySelectorAll('.post-title-breadcrumb');
+
+      function formatISODate(dateString) {
+          const d = new Date(dateString);
+          if (isNaN(d.getTime())) return "2024-01-01";
+          const year = d.getFullYear();
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+      }
+
+      function renderPost() {
+          const params = new URLSearchParams(window.location.search);
+          const postId = parseInt(params.get('id'));
+
+          if (!postId) {
+              entriesContainer.innerHTML = '<p class="alert alert-danger">Blog post not found. Please select a post from the <a href="blog.html">blog page</a>.</p>';
+              return;
+          }
+
+          const post = allPosts.find(p => p.id === postId);
+
+          if (!post) {
+              entriesContainer.innerHTML = '<p class="alert alert-danger">Blog post not found. Please select a post from the <a href="blog.html">blog page</a>.</p>';
+              return;
+          }
+
+          document.title = `${post.title} - Ranjithkumar Baluchamy`;
+          breadcrumbTitles.forEach(el => el.textContent = post.title);
+
+          const postElement = document.createElement('article');
+          postElement.className = 'entry';
+          postElement.innerHTML = `
+              <div class="entry-img">
+                  <img src="${post.image}" alt="${post.title}" class="img-fluid">
+              </div>
+              <h2 class="entry-title">${post.title}</h2>
+              <div class="entry-meta">
+                  <ul>
+                      <li class="d-flex align-items-center"><i class="bi bi-person"></i> <span class="meta-value">${post.author}</span></li>
+                      <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <time datetime="${formatISODate(post.date)}">${post.date}</time></li>
+                      <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <span class="meta-value">${post.category}</span></li>
+                  </ul>
+              </div>
+              <div class="entry-content">
+                  ${post.content}
+              </div>
+              <div class="entry-footer">
+                  <i class="bi bi-folder"></i>
+                  <ul class="cats">
+                      <li><span class="meta-value">${post.category}</span></li>
+                  </ul>
+                  <i class="bi bi-tags"></i>
+                  <ul class="tags">
+                      ${post.tags.map(tag => `<li><a href="#">${tag}</a></li>`).join('')}
+                  </ul>
+              </div>
+          `;
+          entriesContainer.appendChild(postElement);
+
+          const authorBox = `
+              <div class="blog-author d-flex align-items-center">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop&w=120" class="float-left" alt="">
+                  <div>
+                      <h4>${post.author}</h4>
+                      <p>
+                          An innovative and passionate developer with experience in creating user-centered applications and automation solutions. Always curious and constantly learning new technologies.
+                      </p>
+                  </div>
+              </div>`;
+          entriesContainer.insertAdjacentHTML('beforeend', authorBox);
+      }
+      
+      function renderSidebar() {
+          const categoriesContainer = document.querySelector('.sidebar .categories ul');
+          const recentPostsContainer = document.querySelector('.sidebar .recent-posts');
+
+          // Render Categories
+          if (categoriesContainer) {
+              const categoryCounts = allPosts.reduce((acc, post) => {
+                  acc[post.category] = (acc[post.category] || 0) + 1;
+                  return acc;
+              }, {});
+
+              categoriesContainer.innerHTML = Object.entries(categoryCounts)
+                  .map(([category, count]) => `<li><a href="#">${category} <span>(${count})</span></a></li>`)
+                  .join('');
+          }
+
+          // Render Recent Posts
+          if (recentPostsContainer) {
+              recentPostsContainer.innerHTML = '';
+              const recentPosts = allPosts.slice(-5).reverse(); 
+              recentPosts.forEach(post => {
+                  const postItem = document.createElement('div');
+                  postItem.className = 'post-item clearfix';
+                  postItem.innerHTML = `
+                      <img src="${post.image}" alt="${post.title}" style="width: 80px; height: 60px; object-fit: cover;">
+                      <h4><a href="blog-single.html?id=${post.id}">${post.title}</a></h4>
+                      <time datetime="${formatISODate(post.date)}">${post.date}</time>
+                  `;
+                  recentPostsContainer.appendChild(postItem);
+              });
+          }
+      }
+
+      if(entriesContainer) {
+        renderPost();
+        renderSidebar();
+      }
+
     });
   </script>
 
