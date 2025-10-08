@@ -24,16 +24,32 @@
     #preloader{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow:hidden;background:#fff}
     #preloader:before{content:"";position:fixed;top:calc(50% - 30px);left:calc(50% - 30px);border:6px solid #149ddd;border-top-color:#ecf8fe;border-radius:50%;width:60px;height:60px;animation:animate-preloader 1s linear infinite}
     @keyframes animate-preloader{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-    .admin-page{padding:80px 0}
-    .breadcrumbs{padding:15px 0;background:#f5f8fd;min-height:40px;margin-top:60px}
+    .admin-page{padding:20px 0 80px 0; background-color: #f5f8fd;}
+    .breadcrumbs{padding:15px 0;background:#f5f8fd;min-height:40px;margin-top:0px}
     .breadcrumbs h2{font-size:24px;font-weight:300}
     .breadcrumbs ol{display:flex;flex-wrap:wrap;list-style:none;padding:0;margin:0;font-size:14px}
     .breadcrumbs ol li+li{padding-left:10px}
     .breadcrumbs ol li+li::before{display:inline-block;padding-right:10px;color:#6c757d;content:"/"}
     .mobile-nav-toggle{position:fixed;right:15px;top:15px;z-index:9998;border:0;font-size:24px;transition:all .4s;outline:none!important;background-color:#149ddd;color:#fff;width:40px;height:40px;display:none;align-items:center;justify-content:center;line-height:0;border-radius:50px;cursor:pointer}@media (max-width:991px){.mobile-nav-toggle{display:flex}.navbar{position:fixed;top:0;right:0;left:0;bottom:0;background:rgba(5,13,24,.9);transition:all .4s;z-index:9997;transform:translateX(100%);padding:30px;overflow-y:auto}.mobile-nav-active .navbar{transform:translateX(0)}.navbar ul{display:block;position:absolute;top:55px;right:15px;bottom:15px;left:15px;padding:10px 0;border-radius:10px;background-color:#fff;overflow-y:auto;transition:.3s;z-index:9995}.navbar .nav-link{display:flex;align-items:center;justify-content:flex-start;padding:10px 20px;margin:5px 15px;width:auto;height:auto;border-radius:4px;font-size:15px;color:#45505b;background:0 0;box-shadow:none}.navbar .nav-link i{font-size:16px;margin-right:10px;color:#45505b}.navbar .nav-link span{display:inline}.navbar .nav-link:hover,.navbar .nav-link.active{color:#149ddd}.navbar .nav-link:hover i,.navbar .nav-link.active i{color:#149ddd}}
     #footer{padding:25px 0;background:#f5f8fd;text-align:center;font-size:14px}
+    
     /* Editor.js styles */
-    .codex-editor__redactor { padding-bottom: 100px !important; }
+    .editor-form {
+        max-width: 900px;
+        margin: auto;
+    }
+    #editorjs {
+        background: #fff;
+        border-radius: 5px;
+        border: 1px solid #dee2e6;
+        min-height: 500px;
+    }
+    .codex-editor__redactor { 
+        padding-bottom: 150px !important; 
+    }
+    .ce-toolbar__content, .ce-block__content {
+        max-width: calc(100% - 80px); /* More writing space */
+    }
   </style>
 </head>
 
@@ -72,41 +88,45 @@
 
     <section class="admin-page pt-4">
       <div class="container">
-        <form id="post-form" class="card p-4">
-          <input type="hidden" id="postId" name="postId">
-          <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" required>
-          </div>
-          <div class="mb-3">
-            <label for="image" class="form-label">Header Image URL</label>
-            <input type="url" class="form-control" id="image" placeholder="https://placehold.co/850x350..." required>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="author" class="form-label">Author</label>
-              <input type="text" class="form-control" id="author" required>
+        <form id="post-form" class="editor-form">
+          <div class="card p-4">
+            <input type="hidden" id="postId" name="postId">
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" required>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="date" class="form-label">Date</label>
-              <input type="text" class="form-control" id="date" placeholder="e.g., May 20, 2024" required>
+            <div class="mb-3">
+              <label for="image" class="form-label">Header Image URL</label>
+              <input type="url" class="form-control" id="image" placeholder="https://placehold.co/850x350..." required>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" class="form-control" id="author" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="text" class="form-control" id="date" placeholder="e.g., May 20, 2024" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" class="form-control" id="category" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="tags" class="form-label">Tags (comma separated)</label>
+                <input type="text" class="form-control" id="tags" required>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="category" class="form-label">Category</label>
-              <input type="text" class="form-control" id="category" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="tags" class="form-label">Tags (comma separated)</label>
-              <input type="text" class="form-control" id="tags" required>
-            </div>
+          
+          <div class="mt-4">
+            <label class="form-label ps-2">Content</label>
+            <div id="editorjs"></div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Content</label>
-            <div id="editorjs" class="border rounded p-3"></div>
-          </div>
-          <div class="text-end">
+
+          <div class="text-end mt-4">
             <a href="blog-admin.html" class="btn btn-secondary">Cancel</a>
             <button type="submit" class="btn btn-primary" id="submit-button">Save Post</button>
           </div>
@@ -133,6 +153,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="blog-data.js"></script>
@@ -176,6 +198,7 @@
             list: List,
             embed: Embed,
             code: CodeTool,
+            delimiter: Delimiter,
             image: {
                 class: ImageTool,
                 config: {

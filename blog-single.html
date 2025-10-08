@@ -278,12 +278,15 @@
                               </figure>`;
                       break;
                   case 'embed':
-                      html += `<div class="embed-responsive embed-responsive-16by9 my-3">
-                                  <iframe class="embed-responsive-item" src="${block.data.embed}" allowfullscreen></iframe>
+                      html += `<div class="embed-responsive embed-responsive-16by9 my-3 d-flex justify-content-center">
+                                  <iframe class="embed-responsive-item" style="max-width: 100%; width: 100%; aspect-ratio: 16/9;" src="${block.data.embed}" allowfullscreen></iframe>
                               </div>`;
                       break;
                   case 'code':
-                      html += `<pre><code class="language-javascript">${escapeHtml(block.data.code)}</code></pre>`;
+                      html += `<pre><code class="language-plaintext">${escapeHtml(block.data.code)}</code></pre>`;
+                      break;
+                  case 'delimiter':
+                      html += '<hr class="my-4">';
                       break;
                   default:
                       console.log('Unknown block type:', block.type);
@@ -323,7 +326,7 @@
               contentHtml = post.content;
           }
           
-          postElement.innerHTML = `
+          postElement.innerHTML = \`
               <div class="entry-img">
                   <img src="${post.image}" alt="${post.title}" class="img-fluid">
               </div>
@@ -348,14 +351,14 @@
                       ${post.tags.map(tag => `<li><a href="#">${tag}</a></li>`).join('')}
                   </ul>
               </div>
-          `;
+          \`;
           entriesContainer.innerHTML = '';
           entriesContainer.appendChild(postElement);
 
           // Trigger syntax highlighting
           Prism.highlightAll();
 
-          const authorBox = `
+          const authorBox = \`
               <div class="blog-author d-flex align-items-center">
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop&w=120" class="float-left" alt="">
                   <div>
@@ -364,7 +367,7 @@
                           An innovative and passionate developer with experience in creating user-centered applications and automation solutions. Always curious and constantly learning new technologies.
                       </p>
                   </div>
-              </div>`;
+              </div>\`;
           entriesContainer.insertAdjacentHTML('beforeend', authorBox);
       }
       
@@ -391,11 +394,11 @@
               recentPosts.forEach(post => {
                   const postItem = document.createElement('div');
                   postItem.className = 'post-item clearfix';
-                  postItem.innerHTML = `
+                  postItem.innerHTML = \`
                       <img src="${post.image}" alt="${post.title}" style="width: 80px; height: 60px; object-fit: cover;">
                       <h4><a href="blog-single.html?id=${post.id}">${post.title}</a></h4>
                       <time datetime="${formatISODate(post.date)}">${post.date}</time>
-                  `;
+                  \`;
                   recentPostsContainer.appendChild(postItem);
               });
           }
