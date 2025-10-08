@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -488,6 +489,19 @@
           return `${year}-${month}-${day}`;
       }
 
+      function getPostSnippet(content) {
+        if (typeof content === 'string') {
+            return content.split('</p>')[0].replace(/<[^>]+>/g, '').substring(0, 200) + '...';
+        }
+        if (typeof content === 'object' && content.blocks) {
+            const firstParagraph = content.blocks.find(block => block.type === 'paragraph');
+            if (firstParagraph && firstParagraph.data.text) {
+                return firstParagraph.data.text.substring(0, 200) + '...';
+            }
+        }
+        return 'Click to read more...';
+      }
+
       function displayPage(page) {
           currentPage = page;
           if (!entriesContainer) return;
@@ -501,6 +515,8 @@
           paginatedPosts.forEach(post => {
               const postElement = document.createElement('article');
               postElement.className = 'entry';
+              const snippet = getPostSnippet(post.content);
+
               postElement.innerHTML = `
                   <div class="entry-img">
                       <img src="${post.image}" alt="${post.title}" class="img-fluid">
@@ -516,7 +532,7 @@
                       </ul>
                   </div>
                   <div class="entry-content">
-                      <p>${post.content.split('</p>')[0].replace(/<[^>]+>/g, '')}...</p>
+                      <p>${snippet}</p>
                       <div class="read-more">
                           <a href="blog-single.html?id=${post.id}">Read More</a>
                       </div>

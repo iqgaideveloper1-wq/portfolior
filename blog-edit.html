@@ -14,9 +14,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   
-  <!-- TinyMCE Rich Text Editor -->
-  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
   <style>
     body{font-family:"Open Sans",sans-serif;color:#272829}
     a{color:#149ddd;text-decoration:none}
@@ -35,6 +32,8 @@
     .breadcrumbs ol li+li::before{display:inline-block;padding-right:10px;color:#6c757d;content:"/"}
     .mobile-nav-toggle{position:fixed;right:15px;top:15px;z-index:9998;border:0;font-size:24px;transition:all .4s;outline:none!important;background-color:#149ddd;color:#fff;width:40px;height:40px;display:none;align-items:center;justify-content:center;line-height:0;border-radius:50px;cursor:pointer}@media (max-width:991px){.mobile-nav-toggle{display:flex}.navbar{position:fixed;top:0;right:0;left:0;bottom:0;background:rgba(5,13,24,.9);transition:all .4s;z-index:9997;transform:translateX(100%);padding:30px;overflow-y:auto}.mobile-nav-active .navbar{transform:translateX(0)}.navbar ul{display:block;position:absolute;top:55px;right:15px;bottom:15px;left:15px;padding:10px 0;border-radius:10px;background-color:#fff;overflow-y:auto;transition:.3s;z-index:9995}.navbar .nav-link{display:flex;align-items:center;justify-content:flex-start;padding:10px 20px;margin:5px 15px;width:auto;height:auto;border-radius:4px;font-size:15px;color:#45505b;background:0 0;box-shadow:none}.navbar .nav-link i{font-size:16px;margin-right:10px;color:#45505b}.navbar .nav-link span{display:inline}.navbar .nav-link:hover,.navbar .nav-link.active{color:#149ddd}.navbar .nav-link:hover i,.navbar .nav-link.active i{color:#149ddd}}
     #footer{padding:25px 0;background:#f5f8fd;text-align:center;font-size:14px}
+    /* Editor.js styles */
+    .codex-editor__redactor { padding-bottom: 100px !important; }
   </style>
 </head>
 
@@ -71,7 +70,7 @@
       </div>
     </section>
 
-    <section class="admin-page">
+    <section class="admin-page pt-4">
       <div class="container">
         <form id="post-form" class="card p-4">
           <input type="hidden" id="postId" name="postId">
@@ -80,8 +79,8 @@
             <input type="text" class="form-control" id="title" required>
           </div>
           <div class="mb-3">
-            <label for="image" class="form-label">Image URL</label>
-            <input type="url" class="form-control" id="image" required>
+            <label for="image" class="form-label">Header Image URL</label>
+            <input type="url" class="form-control" id="image" placeholder="https://placehold.co/850x350..." required>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
@@ -104,8 +103,8 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" id="content" rows="10"></textarea>
+            <label class="form-label">Content</label>
+            <div id="editorjs" class="border rounded p-3"></div>
           </div>
           <div class="text-end">
             <a href="blog-admin.html" class="btn btn-secondary">Cancel</a>
@@ -126,18 +125,18 @@
       </div>
     </div>
   </footer>
+  
+  <!-- Editor.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="blog-data.js"></script>
   <script>
-    tinymce.init({
-        selector: '#content',
-        plugins: 'autolink lists link image charmap preview anchor',
-        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link',
-        height: 350,
-        menubar: false,
-    });
-    
     document.addEventListener('DOMContentLoaded', () => {
       "use strict";
       const select = (el) => document.querySelector(el);
@@ -158,6 +157,7 @@
       const form = select('#post-form');
       const params = new URLSearchParams(window.location.search);
       const postId = params.get('id') ? parseInt(params.get('id')) : null;
+      let editor;
 
       function getBlogData() {
         const posts = localStorage.getItem('blogPosts');
@@ -168,65 +168,107 @@
         localStorage.setItem('blogPosts', JSON.stringify(posts));
       }
 
-      function initializeForm() {
-        if (!postId) return; // Add mode, do nothing
-
-        // Edit mode
-        const pageTitle = select('#page-title');
-        const breadcrumbTitle = select('#breadcrumb-title');
-        const submitButton = select('#submit-button');
-
-        pageTitle.textContent = 'Edit Post';
-        breadcrumbTitle.textContent = 'Edit Post';
-        submitButton.textContent = 'Update Post';
-        
-        const posts = getBlogData();
-        const post = posts.find(p => p.id === postId);
-
-        if (post) {
-          select('#postId').value = post.id;
-          select('#title').value = post.title;
-          select('#image').value = post.image;
-          select('#author').value = post.author;
-          select('#date').value = post.date;
-          select('#category').value = post.category;
-          select('#tags').value = post.tags.join(', ');
-          select('#content').value = post.content;
-        } else {
-            alert('Post not found!');
-            window.location.href = 'blog-admin.html';
-        }
+      function initializeEditor(data = {}) {
+        editor = new EditorJS({
+          holder: 'editorjs',
+          tools: {
+            header: Header,
+            list: List,
+            embed: Embed,
+            code: CodeTool,
+            image: {
+                class: ImageTool,
+                config: {
+                    uploader: {
+                        uploadByFile(file){
+                            return new Promise((resolve) => {
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                    resolve({
+                                        success: 1,
+                                        file: {
+                                            url: event.target.result,
+                                        }
+                                    });
+                                };
+                                reader.readAsDataURL(file);
+                            });
+                        },
+                    }
+                }
+            }
+          },
+          data: data,
+          placeholder: 'Let`s write an awesome story!'
+        });
       }
 
-      function handleSubmit(event) {
+      function initializeForm() {
+        let postContent = {};
+        if (postId) { // Edit mode
+            const pageTitle = select('#page-title');
+            const breadcrumbTitle = select('#breadcrumb-title');
+            const submitButton = select('#submit-button');
+
+            pageTitle.textContent = 'Edit Post';
+            breadcrumbTitle.textContent = 'Edit Post';
+            submitButton.textContent = 'Update Post';
+            
+            const posts = getBlogData();
+            const post = posts.find(p => p.id === postId);
+
+            if (post) {
+                select('#postId').value = post.id;
+                select('#title').value = post.title;
+                select('#image').value = post.image;
+                select('#author').value = post.author;
+                select('#date').value = post.date;
+                select('#category').value = post.category;
+                select('#tags').value = post.tags.join(', ');
+                postContent = typeof post.content === 'string' ? {} : post.content; // Handle legacy string content
+            } else {
+                alert('Post not found!');
+                window.location.href = 'blog-admin.html';
+                return;
+            }
+        }
+        initializeEditor(postContent);
+      }
+
+      async function handleSubmit(event) {
         event.preventDefault();
         
-        const posts = getBlogData();
-        const tagsArray = select('#tags').value.split(',').map(tag => tag.trim());
+        try {
+            const editorData = await editor.save();
+            const posts = getBlogData();
+            const tagsArray = select('#tags').value.split(',').map(tag => tag.trim()).filter(t => t);
 
-        const postData = {
-          id: postId || Date.now(), // Create new ID if it's a new post
-          title: select('#title').value,
-          image: select('#image').value,
-          author: select('#author').value,
-          date: select('#date').value,
-          category: select('#category').value,
-          tags: tagsArray,
-          content: tinymce.get('content').getContent(),
-        };
+            const postData = {
+              id: postId || Date.now(),
+              title: select('#title').value,
+              image: select('#image').value,
+              author: select('#author').value,
+              date: select('#date').value,
+              category: select('#category').value,
+              tags: tagsArray,
+              content: editorData,
+            };
 
-        if (postId) {
-          // Update existing post
-          const index = posts.findIndex(p => p.id === postId);
-          if(index !== -1) posts[index] = postData;
-        } else {
-          // Add new post
-          posts.push(postData);
+            if (postId) {
+              const index = posts.findIndex(p => p.id === postId);
+              if(index !== -1) posts[index] = postData;
+            } else {
+              posts.push(postData);
+            }
+
+            saveBlogData(posts);
+            alert('Post saved successfully!');
+            window.location.href = 'blog-admin.html';
+
+        } catch (error) {
+            console.error('Saving failed: ', error);
+            alert('Error saving post. Check console for details.');
         }
-
-        saveBlogData(posts);
-        alert('Post saved successfully!');
-        window.location.href = 'blog-admin.html';
       }
 
       if (form) {

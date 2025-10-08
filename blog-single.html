@@ -16,6 +16,9 @@
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   
+  <!-- PrismJS for Syntax Highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
   <!-- Copied styles from blog.html -->
   <style>
     body {
@@ -87,6 +90,11 @@
     .blog .blog-author img { width: 120px; margin-right: 20px; border-radius: 50%;}
     .blog .blog-author h4 { font-weight: 600; font-size: 22px; margin-bottom: 0px; padding: 0; color: #050d18; }
     #footer{padding:25px 0;background:#f5f8fd;text-align:center;font-size:14px}
+    
+    /* Custom styles for rendered content */
+    .entry-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; }
+    .entry-content .ce-embed iframe { width: 100%; min-height: 400px; }
+    .entry-content pre { border-radius: 8px; }
   </style>
 </head>
 
@@ -177,6 +185,8 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
   <script src="blog-data.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -237,6 +247,52 @@
           return `${year}-${month}-${day}`;
       }
 
+      function escapeHtml(unsafe) {
+          return unsafe
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#039;");
+      }
+
+      function renderBlocks(blocks) {
+          let html = '';
+          blocks.forEach(block => {
+              switch (block.type) {
+                  case 'header':
+                      html += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
+                      break;
+                  case 'paragraph':
+                      html += `<p>${block.data.text}</p>`;
+                      break;
+                  case 'list':
+                      const listType = block.data.style === 'ordered' ? 'ol' : 'ul';
+                      const items = block.data.items.map(item => `<li>${item}</li>`).join('');
+                      html += `<${listType}>${items}</${listType}>`;
+                      break;
+                  case 'image':
+                      html += `<figure class="figure w-100 text-center">
+                                  <img src="${block.data.url}" class="figure-img img-fluid rounded" alt="${block.data.caption}">
+                                  <figcaption class="figure-caption text-center">${block.data.caption}</figcaption>
+                              </figure>`;
+                      break;
+                  case 'embed':
+                      html += `<div class="embed-responsive embed-responsive-16by9 my-3">
+                                  <iframe class="embed-responsive-item" src="${block.data.embed}" allowfullscreen></iframe>
+                              </div>`;
+                      break;
+                  case 'code':
+                      html += `<pre><code class="language-javascript">${escapeHtml(block.data.code)}</code></pre>`;
+                      break;
+                  default:
+                      console.log('Unknown block type:', block.type);
+                      break;
+              }
+          });
+          return html;
+      }
+
       function renderPost() {
           const params = new URLSearchParams(window.location.search);
           const postId = parseInt(params.get('id'));
@@ -258,6 +314,15 @@
 
           const postElement = document.createElement('article');
           postElement.className = 'entry';
+          
+          let contentHtml = '';
+          if (typeof post.content === 'object' && post.content.blocks) {
+              contentHtml = renderBlocks(post.content.blocks);
+          } else if (typeof post.content === 'string') {
+              // Legacy support for old string-based content
+              contentHtml = post.content;
+          }
+          
           postElement.innerHTML = `
               <div class="entry-img">
                   <img src="${post.image}" alt="${post.title}" class="img-fluid">
@@ -271,7 +336,7 @@
                   </ul>
               </div>
               <div class="entry-content">
-                  ${post.content}
+                  ${contentHtml}
               </div>
               <div class="entry-footer">
                   <i class="bi bi-folder"></i>
@@ -284,7 +349,11 @@
                   </ul>
               </div>
           `;
+          entriesContainer.innerHTML = '';
           entriesContainer.appendChild(postElement);
+
+          // Trigger syntax highlighting
+          Prism.highlightAll();
 
           const authorBox = `
               <div class="blog-author d-flex align-items-center">
